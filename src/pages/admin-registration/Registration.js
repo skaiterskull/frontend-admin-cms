@@ -1,10 +1,10 @@
 import React from "react";
-import AdminRefForm from "../../components/registration-form/AdminRefForm";
+import AdminRegForm from "../../components/registration-form/AdminRegForm";
 
 const Registration = () => {
   return (
     <div className="d-flex justify-content-center mt-3">
-      <AdminRefForm />
+      <AdminRegForm />
     </div>
   );
 };
