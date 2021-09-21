@@ -50,11 +50,14 @@ const AdminRegForm = () => {
     }
 
     dispatch(createUser(userInfo));
+    if (userResp.status === "success") {
+    }
   };
 
   return (
     <div>
       <h1 className="text-center">Admin User Registration</h1>
+
       <Card className="p-4 mt-3">
         {isPending && (
           <Spinner
@@ -65,6 +68,7 @@ const AdminRegForm = () => {
         )}
         {userResp?.message && (
           <Alert
+            style={{ maxWidth: "400px" }}
             variant={userResp.status === "Success" ? "success" : "danger"}
             className="text-center"
           >
@@ -82,7 +86,7 @@ const AdminRegForm = () => {
             sm="4"
             className="d-flex align-items-center justify-content-start"
           >
-            <Form.Label>First Name</Form.Label>
+            <Form.Label>First Name *</Form.Label>
           </Col>
           <Col sm="8">
             <Form.Control
@@ -100,7 +104,7 @@ const AdminRegForm = () => {
             sm="4"
             className="d-flex align-items-center justify-content-start"
           >
-            <Form.Label>Last Name</Form.Label>
+            <Form.Label>Last Name *</Form.Label>
           </Col>
           <Col sm="8">
             <Form.Control
@@ -130,7 +134,7 @@ const AdminRegForm = () => {
             sm="4"
             className="d-flex align-items-center justify-content-start"
           >
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Email *</Form.Label>
           </Col>
           <Col sm="8">
             <Form.Control
@@ -147,7 +151,7 @@ const AdminRegForm = () => {
             sm="4"
             className="d-flex align-items-center justify-content-start"
           >
-            <Form.Label>Password</Form.Label>
+            <Form.Label>Password *</Form.Label>
           </Col>
           <Col sm="8">
             <Form.Control
@@ -165,7 +169,7 @@ const AdminRegForm = () => {
             sm="4"
             className="d-flex align-items-center justify-content-start"
           >
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label>Confirm Password *</Form.Label>
           </Col>
           <Col sm="8">
             <Form.Control

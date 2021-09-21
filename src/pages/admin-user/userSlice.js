@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isPending: false,
   userResp: {},
+  emailVerificationResp: {},
 };
 
 const userSlice = createSlice({
@@ -18,6 +19,11 @@ const userSlice = createSlice({
       state.userResp = payload;
     },
 
+    emailVerificationSuccess: (state, { payload }) => {
+      state.isPending = false;
+      state.emailVerificationResp = payload;
+    },
+
     resFail: (state, { payload }) => {
       state.isPending = false;
       state.userResp = payload;
@@ -27,5 +33,6 @@ const userSlice = createSlice({
 
 const { reducer, actions } = userSlice;
 
-export const { pendingResp, resSuccess, resFail } = actions;
+export const { pendingResp, resSuccess, resFail, emailVerificationSuccess } =
+  actions;
 export default reducer;

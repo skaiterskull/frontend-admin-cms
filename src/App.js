@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "../src/pages/login/Login";
 import Registration from "../src/pages/admin-registration/Registration";
 import PageNotFound from "./components/page-not-found/PageNotFound";
+import EmailVerification from "./pages/email-verification/EmailVerification";
 function App() {
   return (
     <div>
@@ -11,6 +12,10 @@ function App() {
         <Switch>
           <Route path="/registration">
             <Registration />
+          </Route>
+
+          <Route path="/email-verification">
+            <EmailVerification />
           </Route>
 
           <Route exact path="/">

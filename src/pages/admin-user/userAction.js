@@ -1,5 +1,10 @@
-import { pendingResp, resSuccess, resFail } from "../admin-user/userSlice";
-import { createNewUser } from "../../apis/userApi";
+import {
+  pendingResp,
+  resSuccess,
+  resFail,
+  emailVerificationSuccess,
+} from "../admin-user/userSlice";
+import { createNewUser, verifyNewUserEmail } from "../../apis/userApi";
 
 export const createUser = (userInfo) => async (dispatch) => {
   dispatch(pendingResp());
@@ -10,4 +15,11 @@ export const createUser = (userInfo) => async (dispatch) => {
   }
 
   dispatch(resFail(result));
+};
+
+export const verifyUserEmail = (userInfo) => async (dispatch) => {
+  dispatch(pendingResp());
+  const result = await verifyNewUserEmail(userInfo);
+
+  dispatch(emailVerificationSuccess(result));
 };
