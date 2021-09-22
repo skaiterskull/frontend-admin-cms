@@ -1,5 +1,6 @@
 .admin-layout .main {
   min-height: 80vh;
+  padding: 2rem;
 }
 
 .admin-layout .left {
