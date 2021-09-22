@@ -55,20 +55,15 @@ const AdminRegForm = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-center">Admin User Registration</h1>
+    <div className="text-center p-3">
+      <h1>Admin User Registration</h1>
+      {isPending && (
+        <Spinner className="text-center" variant="primary" animation="border" />
+      )}
 
-      <Card className="p-4 mt-3">
-        {isPending && (
-          <Spinner
-            className="text-center"
-            variant="primary"
-            animation="border"
-          />
-        )}
+      <Card className="p-2 mt-3">
         {userResp?.message && (
           <Alert
-            style={{ maxWidth: "400px" }}
             variant={userResp.status === "Success" ? "success" : "danger"}
             className="text-center"
           >
