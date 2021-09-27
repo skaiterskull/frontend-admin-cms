@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Form, Row, Col, Button, FloatingLabel } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCat } from "../../pages/category/CategoryAction";
-import { Spinner, Alert } from "react-bootstrap";
 
 const initialState = {
   name: "",
@@ -54,7 +53,7 @@ export const AddCategoryForm = () => {
                 name="parentCat"
                 onChange={handleOnChange}
               >
-                <option>Select Parent Category</option>
+                <option value="">Select Parent Category</option>
                 {parentCatOnly.map((row, i) => (
                   <option key={row._id} value={row._id}>
                     {row.name}
@@ -64,7 +63,7 @@ export const AddCategoryForm = () => {
             </FloatingLabel>
           </Col>
           <Col>
-            <Button type="submit" variant="success">
+            <Button type="submit" variant="success" className="mt-md-2 p-3">
               Add
             </Button>
           </Col>

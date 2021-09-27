@@ -1,5 +1,4 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { LoginForm } from "../../components/login-form/LoginForm";
 
 const Login = () => {

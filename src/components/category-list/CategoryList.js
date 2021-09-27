@@ -1,12 +1,36 @@
 import React from "react";
 import { ListGroup, Button } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Spinner, Alert } from "react-bootstrap";
+import { categoryDelete } from "../../pages/category/CategoryAction";
 
 export const CategoryList = () => {
   const { isPending, categories, categoryRes } = useSelector(
     (state) => state.category
   );
+
+  const dispatch = useDispatch();
+
+  //parent cat only
+  const parentCatOnly = categories.filter((row) => !row.parentCat);
+
+  //child cat only
+  const childCat = categories.filter((row) => row.parentCat);
+
+  const handleOnDelete = (_id) => {
+    const hasChildCat = childCat.some((item) => item.parentCat === _id);
+    if (hasChildCat) {
+      return alert(
+        "This category has child category/es. Remove the child category/es or reassign them to another category before deleting"
+      );
+    }
+
+    if (window.confirm("Are you sure you want to delete this category ?")) {
+      dispatch(categoryDelete(_id));
+    }
+
+    console.log(_id);
+  };
 
   return (
     <div>
@@ -19,34 +43,54 @@ export const CategoryList = () => {
         </Alert>
       )}
       <ListGroup>
-        {categories?.length &&
-          categories.map((row) => {
+        {parentCatOnly?.length &&
+          parentCatOnly.map((row) => {
             return (
-              <ListGroup.Item
-                key={row._id}
-                className="d-flex justify-content-between"
-              >
-                <span>{row.name}</span>
-                <span>
-                  <Button variant="primary">Edit</Button>
-                  <Button variant="danger" style={{ marginLeft: "1rem" }}>
-                    Delete
-                  </Button>
-                </span>
-              </ListGroup.Item>
+              <div key={row._id}>
+                <ListGroup.Item
+                  variant="secondary"
+                  className="d-flex justify-content-between"
+                >
+                  <span style={{ fontWeight: "bolder" }}>{row.name}</span>
+                  <span>
+                    <Button variant="primary">Edit</Button>
+                    <Button
+                      variant="danger"
+                      style={{ marginLeft: "1rem" }}
+                      onClick={() => handleOnDelete(row._id)}
+                    >
+                      Delete
+                    </Button>
+                  </span>
+                </ListGroup.Item>
+
+                <ListGroup>
+                  {childCat?.length &&
+                    childCat.map(
+                      (item) =>
+                        item.parentCat === row._id && (
+                          <ListGroup.Item
+                            key={item._id}
+                            className="d-flex justify-content-between"
+                          >
+                            <span> =&gt; {item.name}</span>
+                            <span>
+                              <Button variant="primary">Edit</Button>
+                              <Button
+                                variant="danger"
+                                style={{ marginLeft: "1rem" }}
+                                onClick={() => handleOnDelete(item._id)}
+                              >
+                                Delete
+                              </Button>
+                            </span>
+                          </ListGroup.Item>
+                        )
+                    )}
+                </ListGroup>
+              </div>
             );
           })}
-      </ListGroup>
-      <ListGroup>
-        <ListGroup.Item className="d-flex justify-content-between">
-          <span> =&gt; Category name</span>
-          <span>
-            <Button variant="primary">Edit</Button>
-            <Button variant="danger" style={{ marginLeft: "1rem" }}>
-              Delete
-            </Button>
-          </span>
-        </ListGroup.Item>
       </ListGroup>
     </div>
   );
