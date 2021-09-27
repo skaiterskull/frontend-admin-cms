@@ -1,26 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Row, Col, Button, FloatingLabel } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewCat } from "../../pages/category/CategoryAction";
+import { Spinner, Alert } from "react-bootstrap";
+
+const initialState = {
+  name: "",
+  parentCat: "",
+};
 
 export const AddCategoryForm = () => {
-  const categories = [
-    { _id: 1, name: "Grocery", slug: "grocery", parentCat: "" },
-    { _id: 2, name: "Milk", slug: "Milk", parentCat: "1" },
-    { _id: 3, name: "Electronic", slug: "Electronic", parentCat: "" },
-    { _id: 4, name: "Laptops", slug: "Laptops", parentCat: "3" },
-    { _id: 5, name: "Mobile", slug: "Mobile", parentCat: "3" },
-    { _id: 6, name: "Furniture", slug: "Furniture", parentCat: "" },
-  ];
+  const { categories } = useSelector((state) => state.category);
+  const dispatch = useDispatch();
+  const [newCat, setNewCat] = useState(initialState);
 
   //parent cat only
   const parentCatOnly = categories.filter((row) => !row.parentCat);
 
   //child cat only
-  const childCat = categories.filter(() => {});
-  const handleOnChange = (e) => {};
+  // const childCat = categories.filter((row) => row.parentCat);
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setNewCat({ ...newCat, [name]: value });
+  };
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addNewCat(newCat));
+  };
 
   return (
     <div>
-      <Form>
+      <Form onSubmit={handleOnSubmit}>
         <Row>
           <Col md={5} className="mt-md-2">
             <FloatingLabel
@@ -30,7 +40,7 @@ export const AddCategoryForm = () => {
               <Form.Control
                 name="name"
                 placeholder="Enter Category Name"
-                handleOnChange={handleOnChange}
+                onChange={handleOnChange}
               />
             </FloatingLabel>
           </Col>
@@ -39,9 +49,12 @@ export const AddCategoryForm = () => {
               controlId="floatingSelectGrid"
               label="Select Category"
             >
-              <Form.Select aria-label="Floating label select example">
+              <Form.Select
+                aria-label="Floating label select example"
+                name="parentCat"
+                onChange={handleOnChange}
+              >
                 <option>Select Parent Category</option>
-
                 {parentCatOnly.map((row, i) => (
                   <option key={row._id} value={row._id}>
                     {row.name}

@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import { AddCategoryForm } from "../../components/add-category-form/AddCategoryForm";
-import { ListGroup, Button } from "react-bootstrap";
+import { CategoryList } from "../../components/category-list/CategoryList";
+import { getCategories } from "./CategoryAction";
+import { useDispatch } from "react-redux";
 
 const Category = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
+
   return (
     <AdminLayout>
       <h1>Category</h1>
@@ -12,28 +20,7 @@ const Category = () => {
       </div>
       <hr />
       <div className="cat-list">
-        <ListGroup>
-          <ListGroup.Item className="d-flex justify-content-between">
-            <span>Category name</span>
-            <span>
-              <Button variant="primary">Edit</Button>
-              <Button variant="danger" style={{ marginLeft: "1rem" }}>
-                Delete
-              </Button>
-            </span>
-          </ListGroup.Item>
-        </ListGroup>
-        <ListGroup>
-          <ListGroup.Item className="d-flex justify-content-between">
-            <span>Category name</span>
-            <span>
-              <Button variant="primary">Edit</Button>
-              <Button variant="danger" style={{ marginLeft: "1rem" }}>
-                Delete
-              </Button>
-            </span>
-          </ListGroup.Item>
-        </ListGroup>
+        <CategoryList />
       </div>
     </AdminLayout>
   );
