@@ -35,3 +35,13 @@ export const deleteCategory = async (_id) => {
     return { status: "Error", message: error.message };
   }
 };
+
+export const updateCategory = async (catObj) => {
+  try {
+    const { data } = await axios.patch(catAPI, catObj);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { status: "Error", message: error.message };
+  }
+};

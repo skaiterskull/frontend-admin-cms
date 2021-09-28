@@ -2,6 +2,7 @@ import {
   reqPending,
   fetchCategoriesSuccess,
   addCatSuccess,
+  updateCatSuccess,
   deleteCatSuccess,
   reqFail,
 } from "./CategorySlice";
@@ -9,6 +10,7 @@ import {
   fetchCategory,
   addCategory,
   deleteCategory,
+  updateCategory,
 } from "../../apis/categoryApi";
 
 export const getCategories = () => async (dispatch) => {
@@ -40,6 +42,17 @@ export const categoryDelete = (id) => async (dispatch) => {
 
   if (result.status === "Success") {
     dispatch(deleteCatSuccess(result));
+    return dispatch(getCategories());
+  }
+  dispatch(reqFail(result));
+};
+
+export const categoryUpdate = (catObj) => async (dispatch) => {
+  dispatch(reqPending());
+  const result = await updateCategory(catObj);
+
+  if (result.status === "Success") {
+    dispatch(updateCatSuccess(result));
     return dispatch(getCategories());
   }
   dispatch(reqFail(result));

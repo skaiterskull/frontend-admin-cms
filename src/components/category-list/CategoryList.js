@@ -3,6 +3,8 @@ import { ListGroup, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Spinner, Alert } from "react-bootstrap";
 import { categoryDelete } from "../../pages/category/CategoryAction";
+import { onCategorySelect } from "../../pages/category/CategorySlice";
+import { EditCategoryForm } from "../edit-category-form/EditCategoryForm";
 
 export const CategoryList = () => {
   const { isPending, categories, categoryRes } = useSelector(
@@ -28,12 +30,11 @@ export const CategoryList = () => {
     if (window.confirm("Are you sure you want to delete this category ?")) {
       dispatch(categoryDelete(_id));
     }
-
-    console.log(_id);
   };
 
   return (
     <div>
+      <EditCategoryForm />
       {isPending && <Spinner variant="primary" animation="border" />}
       {categoryRes.status && (
         <Alert
@@ -43,7 +44,7 @@ export const CategoryList = () => {
         </Alert>
       )}
       <ListGroup>
-        {parentCatOnly?.length &&
+        {parentCatOnly &&
           parentCatOnly.map((row) => {
             return (
               <div key={row._id}>
@@ -53,7 +54,12 @@ export const CategoryList = () => {
                 >
                   <span style={{ fontWeight: "bolder" }}>{row.name}</span>
                   <span>
-                    <Button variant="primary">Edit</Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => dispatch(onCategorySelect(row))}
+                    >
+                      Edit
+                    </Button>
                     <Button
                       variant="danger"
                       style={{ marginLeft: "1rem" }}
@@ -65,7 +71,7 @@ export const CategoryList = () => {
                 </ListGroup.Item>
 
                 <ListGroup>
-                  {childCat?.length &&
+                  {childCat &&
                     childCat.map(
                       (item) =>
                         item.parentCat === row._id && (
@@ -75,7 +81,12 @@ export const CategoryList = () => {
                           >
                             <span> =&gt; {item.name}</span>
                             <span>
-                              <Button variant="primary">Edit</Button>
+                              <Button
+                                variant="primary"
+                                onClick={() => dispatch(onCategorySelect(item))}
+                              >
+                                Edit
+                              </Button>
                               <Button
                                 variant="danger"
                                 style={{ marginLeft: "1rem" }}
