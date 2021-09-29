@@ -5,6 +5,7 @@ const initialState = {
   userResp: {},
   emailVerificationResp: {},
   isLoggedIn: false,
+  user: {},
 };
 
 const userSlice = createSlice({
@@ -25,8 +26,11 @@ const userSlice = createSlice({
       state.emailVerificationResp = payload;
     },
 
-    loginSuccess: (state) => {
+    loginSuccess: (state, { payload }) => {
+      state.isPending = false;
+      state.userResp = {};
       state.isLoggedIn = true;
+      state.user = payload;
     },
 
     resFail: (state, { payload }) => {
