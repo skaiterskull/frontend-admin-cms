@@ -11,41 +11,42 @@ import Product from "./pages/product/Product";
 import Order from "./pages/order/Order";
 import Customer from "./pages/customer/Customer";
 import Payment from "./pages/payment/Payment";
+import PrivateRoute from "./components/private-route/PrivateRoute";
 function App() {
   return (
     <div>
       <Router>
         <Switch>
-          <Route path="/registration">
+          <PrivateRoute path="/registration">
             <Registration />
-          </Route>
+          </PrivateRoute>
+
+          <PrivateRoute path="/dashboard">
+            <Dashboard />
+          </PrivateRoute>
+
+          <PrivateRoute path="/categories">
+            <Category />
+          </PrivateRoute>
+
+          <PrivateRoute path="/products">
+            <Product />
+          </PrivateRoute>
+
+          <PrivateRoute path="/orders">
+            <Order />
+          </PrivateRoute>
+
+          <PrivateRoute path="/customers">
+            <Customer />
+          </PrivateRoute>
+
+          <PrivateRoute path="/payments">
+            <Payment />
+          </PrivateRoute>
 
           <Route path="/email-verification">
             <EmailVerification />
-          </Route>
-
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-
-          <Route path="/categories">
-            <Category />
-          </Route>
-
-          <Route path="/products">
-            <Product />
-          </Route>
-
-          <Route path="/orders">
-            <Order />
-          </Route>
-
-          <Route path="/customers">
-            <Customer />
-          </Route>
-
-          <Route path="/payments">
-            <Payment />
           </Route>
 
           <Route exact path="/">

@@ -1,25 +1,26 @@
 import React from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { adminLogin } from "../../pages/admin-user/userAction";
 
 export const LoginForm = () => {
   const history = useHistory();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const from = location?.state?.from?.pathname || "/dashboard";
+
   const handleOnChange = (e) => {};
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    history.push("/dashboard");
+    dispatch(adminLogin());
+    history.replace(from);
   };
   return (
     <div>
       <Card className="p-5 mt-4">
         <h1>Admin User Login</h1>
-
-        {/* {isPending && <Spinner variant="primary" animation="border" />}
-				{userResp?.message && (
-					<Alert variant={userResp.status === "success" ? "success" : "danger"}>
-						{userResp.message}
-					</Alert>
-				)} */}
         <hr />
         <Form onSubmit={handleOnSubmit}>
           <Form.Group as={Row} className="mb-3 mt-3">

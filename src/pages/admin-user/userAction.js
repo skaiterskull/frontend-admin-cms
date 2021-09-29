@@ -1,6 +1,7 @@
 import {
   pendingResp,
   resSuccess,
+  loginSuccess,
   resFail,
   emailVerificationSuccess,
 } from "../admin-user/userSlice";
@@ -22,4 +23,8 @@ export const verifyUserEmail = (userInfo) => async (dispatch) => {
   const result = await verifyNewUserEmail(userInfo);
 
   dispatch(emailVerificationSuccess(result));
+};
+
+export const adminLogin = () => (dispatch) => {
+  dispatch(loginSuccess());
 };
