@@ -6,6 +6,7 @@ import {
   logoutUserSuccessSlice,
   resFail,
   emailVerificationSuccess,
+  autoLoginPendingSlice,
 } from "../admin-user/userSlice";
 import {
   createNewUser,
@@ -44,6 +45,8 @@ export const adminLogin = (loginInfo) => async (dispatch) => {
 };
 
 export const autoLoginAction = () => async (dispatch) => {
+  dispatch(autoLoginPendingSlice());
+
   const accessJWT = window.sessionStorage.getItem("accessJWT");
   const refreshJWT = window.localStorage.getItem("refreshJWT");
 

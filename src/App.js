@@ -1,6 +1,5 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
 import Login from "../src/pages/login/Login";
 import Registration from "../src/pages/admin-registration/Registration";
 import PageNotFound from "./components/page-not-found/PageNotFound";
@@ -12,6 +11,7 @@ import Order from "./pages/order/Order";
 import Customer from "./pages/customer/Customer";
 import Payment from "./pages/payment/Payment";
 import PrivateRoute from "./components/private-route/PrivateRoute";
+
 function App() {
   return (
     <div>

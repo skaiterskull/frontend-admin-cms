@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isPending: false,
+  isAutoLoginPending: false,
   userResp: {},
   emailVerificationResp: {},
   isLoggedIn: false,
@@ -33,12 +34,18 @@ const userSlice = createSlice({
       state.user = payload;
     },
 
+    autoLoginPendingSlice: (state) => {
+      state.isAutoLoginPending = true;
+    },
+
     autoLoginSlice: (state) => {
       state.isLoggedIn = true;
+      state.isAutoLoginPending = false;
     },
 
     logoutUserSuccessSlice: (state) => {
       state.isLoggedIn = false;
+      state.isAutoLoginPending = false;
       state.user = {};
     },
 
@@ -56,8 +63,10 @@ export const {
   resSuccess,
   loginSuccess,
   autoLoginSlice,
+  pageLoadingSuccess,
   logoutUserSuccessSlice,
   resFail,
   emailVerificationSuccess,
+  autoLoginPendingSlice,
 } = actions;
 export default reducer;

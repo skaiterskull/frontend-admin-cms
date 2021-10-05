@@ -14,17 +14,19 @@ export const LoginForm = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
-
   const { isPending, userResp, isLoggedIn } = useSelector(
     (state) => state.user
   );
   const from = location?.state?.from?.pathname || "/dashboard";
-
+  const [isLoading, setIsLoading] = useState(true);
   const [loginInfo, setLoginInfo] = useState(initialState);
-
+  const pageLoading = () => {
+    setIsLoading(false);
+  };
   useEffect(() => {
     !isLoggedIn && dispatch(autoLoginAction());
     isLoggedIn && history.replace(from);
+    setTimeout(pageLoading, 3000);
   }, [isLoggedIn, history, from, dispatch]);
 
   const handleOnChange = (e) => {
@@ -38,6 +40,14 @@ export const LoginForm = () => {
     }
     dispatch(adminLogin(loginInfo));
   };
+
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <Spinner animation="border"></Spinner>;
+      </div>
+    );
+  }
 
   return (
     <div>
