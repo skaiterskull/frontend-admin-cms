@@ -11,6 +11,7 @@ import Order from "./pages/order/Order";
 import Customer from "./pages/customer/Customer";
 import Payment from "./pages/payment/Payment";
 import PrivateRoute from "./components/private-route/PrivateRoute";
+import AdminProfile from "./pages/admin-profile/AdminProfile";
 
 function App() {
   return (
@@ -31,6 +32,10 @@ function App() {
 
           <PrivateRoute path="/products">
             <Product />
+          </PrivateRoute>
+
+          <PrivateRoute path="/admin-profile">
+            <AdminProfile />
           </PrivateRoute>
 
           <PrivateRoute path="/orders">
