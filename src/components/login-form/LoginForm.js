@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { adminLogin } from "../../pages/admin-user/userAction";
+import { adminLogin, autoLoginAction } from "../../pages/admin-user/userAction";
 import { Alert, Spinner } from "react-bootstrap";
 
 const initialState = {
@@ -23,8 +23,9 @@ export const LoginForm = () => {
   const [loginInfo, setLoginInfo] = useState(initialState);
 
   useEffect(() => {
+    !isLoggedIn && dispatch(autoLoginAction());
     isLoggedIn && history.replace(from);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, history, from, dispatch]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;

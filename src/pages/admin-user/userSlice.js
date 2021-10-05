@@ -33,6 +33,15 @@ const userSlice = createSlice({
       state.user = payload;
     },
 
+    autoLoginSlice: (state) => {
+      state.isLoggedIn = true;
+    },
+
+    logoutUserSuccessSlice: (state) => {
+      state.isLoggedIn = false;
+      state.user = {};
+    },
+
     resFail: (state, { payload }) => {
       state.isPending = false;
       state.userResp = payload;
@@ -46,6 +55,8 @@ export const {
   pendingResp,
   resSuccess,
   loginSuccess,
+  autoLoginSlice,
+  logoutUserSuccessSlice,
   resFail,
   emailVerificationSuccess,
 } = actions;
