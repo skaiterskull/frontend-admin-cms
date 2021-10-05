@@ -14,10 +14,8 @@ export const AddCategoryForm = () => {
   const [newCat, setNewCat] = useState(initialState);
 
   //parent cat only
-  const parentCatOnly = categories.filter((row) => !row.parentCat);
+  const parentCatOnly = categories?.filter((row) => !row.parentCat);
 
-  //child cat only
-  // const childCat = categories.filter((row) => row.parentCat);
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setNewCat({ ...newCat, [name]: value });
@@ -54,7 +52,7 @@ export const AddCategoryForm = () => {
                 onChange={handleOnChange}
               >
                 <option value="">Select Parent Category</option>
-                {parentCatOnly.map((row, i) => (
+                {parentCatOnly?.map((row, i) => (
                   <option key={row._id} value={row._id}>
                     {row.name}
                   </option>

@@ -14,13 +14,13 @@ export const CategoryList = () => {
   const dispatch = useDispatch();
 
   //parent cat only
-  const parentCatOnly = categories.filter((row) => !row.parentCat);
+  const parentCatOnly = categories?.filter((row) => !row.parentCat);
 
   //child cat only
-  const childCat = categories.filter((row) => row.parentCat);
+  const childCat = categories?.filter((row) => row.parentCat);
 
   const handleOnDelete = (_id) => {
-    const hasChildCat = childCat.some((item) => item.parentCat === _id);
+    const hasChildCat = childCat?.some((item) => item.parentCat === _id);
     if (hasChildCat) {
       return alert(
         "This category has child category/es. Remove the child category/es or reassign them to another category before deleting"
@@ -36,11 +36,11 @@ export const CategoryList = () => {
     <div>
       <EditCategoryForm />
       {isPending && <Spinner variant="primary" animation="border" />}
-      {categoryRes.status && (
+      {categoryRes?.status && (
         <Alert
-          variant={categoryRes.status === "Success" ? "success" : "danger"}
+          variant={categoryRes?.status === "Success" ? "success" : "danger"}
         >
-          {categoryRes.message}
+          {categoryRes?.message}
         </Alert>
       )}
       <ListGroup>

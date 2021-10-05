@@ -15,7 +15,7 @@ export const EditCategoryForm = () => {
   }, [selectedCat]);
 
   //parent cat only
-  const parentCatOnly = categories.filter((row) => !row.parentCat);
+  const parentCatOnly = categories?.filter((row) => !row.parentCat);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +66,7 @@ export const EditCategoryForm = () => {
                   onChange={handleOnChange}
                 >
                   <option value="">Select Parent Category</option>
-                  {parentCatOnly.map((row, i) => (
+                  {parentCatOnly?.map((row, i) => (
                     <option
                       key={row._id}
                       value={row._id}
