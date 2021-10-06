@@ -7,11 +7,13 @@ import {
   resFail,
   emailVerificationSuccess,
   autoLoginPendingSlice,
+  getAdminProfile,
 } from "../admin-user/userSlice";
 import {
   createNewUser,
   verifyNewUserEmail,
   loginAdmin,
+  fetchUserProfile,
 } from "../../apis/userApi";
 import { newAccessJWTApi } from "../../apis/tokenApi";
 
@@ -56,8 +58,7 @@ export const autoLoginAction = () => async (dispatch) => {
 
   if (!accessJWT && refreshJWT) {
     const data = await newAccessJWTApi();
-    if (data?.accessJWT) {
-      window.sessionStorage.setItem("accessJWT", data.accessJWT);
+    if (data) {
       return dispatch(autoLoginSlice());
     }
   }
@@ -69,4 +70,23 @@ export const userLogoutAction = () => (dispatch) => {
   window.sessionStorage.removeItem("accessJWT");
   window.localStorage.removeItem("refreshJWT");
   dispatch(logoutUserSuccessSlice());
+};
+
+export const getUserProfile = () => async (dispatch) => {
+  dispatch(pendingResp());
+  const result = await fetchUserProfile();
+  if (result?.message === "JWT expired") {
+    const token = await newAccessJWTApi();
+    if (token) {
+      return dispatch(getUserProfile());
+    } else {
+      return dispatch(userLogoutAction());
+    }
+  }
+
+  if (result?.status === "Success") {
+    return dispatch(getAdminProfile(result.user));
+  }
+
+  dispatch(resFail(result));
 };
