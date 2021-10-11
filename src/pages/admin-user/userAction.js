@@ -10,6 +10,7 @@ import {
   getAdminProfile,
   updateAdminProfile,
   updateAdminPassword,
+  requestOTPSuccess,
 } from "../admin-user/userSlice";
 import {
   createNewUser,
@@ -18,8 +19,12 @@ import {
   fetchUserProfile,
   updateUserProfile,
   updateUserPassword,
+  resetUserPassword,
 } from "../../apis/userApi";
-import { newAccessJWTApi } from "../../apis/tokenApi";
+import {
+  newAccessJWTApi,
+  requestPasswordRequestOTP,
+} from "../../apis/tokenApi";
 
 export const createUser = (userInfo) => async (dispatch) => {
   dispatch(pendingResp());
@@ -132,4 +137,22 @@ export const updateUserPasswordAction = (obj) => async (dispatch) => {
   }
 
   dispatch(resFail(result));
+};
+
+export const requestOTPAction = (email) => async (dispatch) => {
+  dispatch(pendingResp());
+
+  const data = await requestPasswordRequestOTP({ email });
+  data?.status === "Success"
+    ? dispatch(requestOTPSuccess({ data, email }))
+    : dispatch(resFail(data));
+};
+
+export const resetPasswordAction = (obj) => async (dispatch) => {
+  dispatch(pendingResp());
+
+  const data = await resetUserPassword(obj);
+  data?.status === "Success"
+    ? dispatch(updateAdminPassword(data))
+    : dispatch(resFail(data));
 };

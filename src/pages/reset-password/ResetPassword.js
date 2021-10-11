@@ -4,11 +4,11 @@ import { OtpRequestForm } from "../../components/reset-password-form/OtpRequestF
 import { ResetPasswordForm } from "../../components/reset-password-form/ResetPasswordForm";
 
 const ResetPassword = () => {
-  const { showResetForm } = useSelector((state) => state.user);
+  const { showResetPassForm } = useSelector((state) => state.user);
 
   return (
     <div className="d-flex justify-content-center">
-      {showResetForm ? <ResetPasswordForm /> : <OtpRequestForm />}
+      {showResetPassForm ? <ResetPasswordForm /> : <OtpRequestForm />}
     </div>
   );
 };

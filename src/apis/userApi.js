@@ -74,3 +74,12 @@ export const updateUserPassword = async (obj) => {
     return error.response.data || error.message;
   }
 };
+
+export const resetUserPassword = async (obj) => {
+  try {
+    const { data } = await axios.patch(userAPI + "/reset-password", obj);
+    return data;
+  } catch (error) {
+    return { status: "Error", message: error.message };
+  }
+};

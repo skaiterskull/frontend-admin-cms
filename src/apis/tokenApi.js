@@ -5,6 +5,7 @@ const rootUrl =
     ? process.env.ROOT_URL
     : "http://localhost:8000";
 const tokenAPI = rootUrl + "/api/v1/token";
+const otpAPI = tokenAPI + "/request-otp";
 
 export const newAccessJWTApi = async () => {
   try {
@@ -17,5 +18,18 @@ export const newAccessJWTApi = async () => {
   } catch (error) {
     console.log(error);
     return false;
+  }
+};
+
+export const requestPasswordRequestOTP = async (email) => {
+  try {
+    const { data } = await axios.post(otpAPI, email);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return {
+      status: "error",
+      message: error.message,
+    };
   }
 };
