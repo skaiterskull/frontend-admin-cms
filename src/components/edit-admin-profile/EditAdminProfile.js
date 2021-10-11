@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
+import { updateUserProfileAction } from "../../pages/admin-user/userAction";
+import { Spinner, Alert } from "react-bootstrap";
 
 export const EditAdminProfile = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user, isPending, userResp } = useSelector((state) => state.user);
   const [userInfo, setUserInfo] = useState(user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setUserInfo(user);
@@ -12,6 +15,17 @@ export const EditAdminProfile = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    const { fname, lname, dob, phone, address, gender } = userInfo;
+    const newUserInfo = {
+      fname,
+      lname,
+      dob,
+      phone,
+      address,
+      gender,
+    };
+    dispatch(updateUserProfileAction(newUserInfo));
+    console.log(newUserInfo);
   };
 
   const handleOnChange = (e) => {
@@ -21,6 +35,13 @@ export const EditAdminProfile = () => {
 
   return (
     <Form onSubmit={handleOnSubmit}>
+      {isPending && <Spinner variant="primary" animation="border" />}
+      {userResp?.message && (
+        <Alert variant={userResp.status === "Success" ? "success" : "danger"}>
+          {userResp.message}
+        </Alert>
+      )}
+
       <Form.Group as={Row} className="mb-2 mt-2">
         <Col sm="4" className="d-flex align-items-center justify-content-start">
           <Form.Label>First Name *</Form.Label>
@@ -58,20 +79,10 @@ export const EditAdminProfile = () => {
           <Form.Label>DOB</Form.Label>
         </Col>
         <Col sm="8">
-          <Form.Control type="date" name="dob" onChange={handleOnChange} />
-        </Col>
-      </Form.Group>
-      {/* email */}
-      <Form.Group as={Row} className="mb-2 mt-2">
-        <Col sm="4" className="d-flex align-items-center justify-content-start">
-          <Form.Label>Email *</Form.Label>
-        </Col>
-        <Col sm="8">
           <Form.Control
-            type="email"
-            name="email"
-            value={userInfo.email}
-            placeholder="Email"
+            type="date"
+            name="dob"
+            value={userInfo.dob ? userInfo.dob.substr(0, 10) : undefined}
             onChange={handleOnChange}
           />
         </Col>
@@ -115,7 +126,8 @@ export const EditAdminProfile = () => {
           <InputGroup>
             <InputGroup.Radio
               name="gender"
-              value="male"
+              value="Male"
+              checked={userInfo?.gender === "Male"}
               aria-label="Male"
               onChange={handleOnChange}
             />
@@ -126,7 +138,8 @@ export const EditAdminProfile = () => {
           <InputGroup>
             <InputGroup.Radio
               name="gender"
-              value="female"
+              value="Female"
+              checked={userInfo?.gender === "Female"}
               aria-label="Female"
               onChange={handleOnChange}
             />
@@ -139,6 +152,7 @@ export const EditAdminProfile = () => {
         className="mt-3"
         variant="primary"
         type="submit"
+        size="lg"
         onClick={handleOnSubmit}
       >
         Update Profile

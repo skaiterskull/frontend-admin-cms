@@ -4,6 +4,7 @@ import AdminLayout from "../layout/AdminLayout";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserProfile } from "../admin-user/userAction.js";
 import { EditAdminProfile } from "../../components/edit-admin-profile/EditAdminProfile";
+import { UpdatePassword } from "../../components/update-password/UpdatePassword";
 
 export const AdminProfile = () => {
   const { user } = useSelector((state) => state.user);
@@ -23,7 +24,10 @@ export const AdminProfile = () => {
       </div>
       <hr />
       <h2>Update Password</h2>
-      <div className="edit-password-form">Edit password</div>
+      <div className="edit-password-form">
+        <UpdatePassword />
+      </div>
+
       <hr />
     </AdminLayout>
   );

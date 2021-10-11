@@ -8,12 +8,16 @@ import {
   emailVerificationSuccess,
   autoLoginPendingSlice,
   getAdminProfile,
+  updateAdminProfile,
+  updateAdminPassword,
 } from "../admin-user/userSlice";
 import {
   createNewUser,
   verifyNewUserEmail,
   loginAdmin,
   fetchUserProfile,
+  updateUserProfile,
+  updateUserPassword,
 } from "../../apis/userApi";
 import { newAccessJWTApi } from "../../apis/tokenApi";
 
@@ -86,6 +90,45 @@ export const getUserProfile = () => async (dispatch) => {
 
   if (result?.status === "Success") {
     return dispatch(getAdminProfile(result.user));
+  }
+
+  dispatch(resFail(result));
+};
+
+export const updateUserProfileAction = (obj) => async (dispatch) => {
+  dispatch(pendingResp());
+  const result = await updateUserProfile(obj);
+  if (result?.message === "JWT expired") {
+    const token = await newAccessJWTApi();
+    if (token) {
+      return dispatch(updateUserProfileAction(obj));
+    } else {
+      return dispatch(userLogoutAction());
+    }
+  }
+
+  if (result?.status === "Success") {
+    dispatch(updateAdminProfile(result));
+    return dispatch(getUserProfile());
+  }
+
+  dispatch(resFail(result));
+};
+
+export const updateUserPasswordAction = (obj) => async (dispatch) => {
+  dispatch(pendingResp());
+  const result = await updateUserPassword(obj);
+  if (result?.message === "JWT expired") {
+    const token = await newAccessJWTApi();
+    if (token) {
+      return dispatch(updateUserPasswordAction(obj));
+    } else {
+      return dispatch(userLogoutAction());
+    }
+  }
+
+  if (result?.status === "Success") {
+    return dispatch(updateAdminPassword(result));
   }
 
   dispatch(resFail(result));

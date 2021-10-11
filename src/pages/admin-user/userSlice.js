@@ -50,7 +50,18 @@ const userSlice = createSlice({
     },
 
     getAdminProfile: (state, { payload = {} }) => {
+      state.isPending = false;
       state.user = payload;
+    },
+
+    updateAdminProfile: (state, { payload = {} }) => {
+      state.isPending = false;
+      state.userResp = payload;
+    },
+
+    updateAdminPassword: (state, { payload = {} }) => {
+      state.isPending = false;
+      state.userResp = payload;
     },
 
     resFail: (state, { payload }) => {
@@ -73,5 +84,7 @@ export const {
   emailVerificationSuccess,
   autoLoginPendingSlice,
   getAdminProfile,
+  updateAdminProfile,
+  updateAdminPassword,
 } = actions;
 export default reducer;
