@@ -5,8 +5,10 @@ const initialState = {
   isAutoLoginPending: false,
   userResp: {},
   emailVerificationResp: {},
+  showResetPassForm: false,
   isLoggedIn: false,
   user: {},
+  passResetEmail: "",
 };
 
 const userSlice = createSlice({
@@ -49,6 +51,32 @@ const userSlice = createSlice({
       state.user = {};
     },
 
+    getAdminProfile: (state, { payload = {} }) => {
+      state.isPending = false;
+      state.user = payload;
+    },
+
+    updateAdminProfile: (state, { payload = {} }) => {
+      state.isPending = false;
+      state.userResp = payload;
+    },
+
+    updateAdminPassword: (state, { payload = {} }) => {
+      state.isPending = false;
+      state.userResp = payload;
+    },
+
+    togglePasswordReset: (state) => {
+      state.showResetPassForm = !state.showResetPassForm;
+    },
+
+    requestOTPSuccess: (state, { payload = {} }) => {
+      state.isPending = false;
+      state.userResp = payload.data;
+      state.showResetPassForm = true;
+      state.passResetEmail = payload.email;
+    },
+
     resFail: (state, { payload }) => {
       state.isPending = false;
       state.userResp = payload;
@@ -68,5 +96,10 @@ export const {
   resFail,
   emailVerificationSuccess,
   autoLoginPendingSlice,
+  getAdminProfile,
+  updateAdminProfile,
+  updateAdminPassword,
+  togglePasswordReset,
+  requestOTPSuccess,
 } = actions;
 export default reducer;

@@ -12,6 +12,7 @@ import Customer from "./pages/customer/Customer";
 import Payment from "./pages/payment/Payment";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import AdminProfile from "./pages/admin-profile/AdminProfile";
+import ResetPassword from "./pages/reset-password/ResetPassword";
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
           <PrivateRoute path="/payments">
             <Payment />
           </PrivateRoute>
+
+          <Route path="/reset-password">
+            <ResetPassword />
+          </Route>
 
           <Route path="/email-verification">
             <EmailVerification />

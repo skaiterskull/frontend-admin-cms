@@ -22,9 +22,9 @@ export const getCategories = () => async (dispatch) => {
   if (result?.message === "JWT expired") {
     const token = await newAccessJWTApi();
     if (token) {
-      dispatch(getCategories());
+      return dispatch(getCategories());
     } else {
-      dispatch(userLogoutAction());
+      return dispatch(userLogoutAction());
     }
   }
 

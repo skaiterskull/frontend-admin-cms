@@ -99,6 +99,9 @@ export const LoginForm = () => {
             </Button>
           </div>
         </Form>
+        <div className="mt-2 text-end">
+          <a href="/reset-password">Forgot Password?</a>
+        </div>
       </Card>
     </div>
   );
