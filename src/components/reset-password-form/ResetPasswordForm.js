@@ -10,7 +10,7 @@ const initialState = {
   password: "",
 };
 
-export const LoginForm = () => {
+export const ResetPasswordForm = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -41,18 +41,10 @@ export const LoginForm = () => {
     dispatch(adminLogin(loginInfo));
   };
 
-  if (isLoading) {
-    return (
-      <div className="loader">
-        <Spinner animation="border"></Spinner>;
-      </div>
-    );
-  }
-
   return (
     <div>
       <Card className="p-5 mt-4">
-        <h1>Admin User Login</h1>
+        <h1>Reset Password </h1>
         {isPending && <Spinner variant="primary" animation="border" />}
         {userResp?.message && (
           <Alert variant={userResp.status === "success" ? "success" : "danger"}>
@@ -64,7 +56,21 @@ export const LoginForm = () => {
         <Form onSubmit={handleOnSubmit}>
           <Form.Group as={Row} className="mb-3 mt-3">
             <Form.Label column sm="4">
-              Email *
+              OTP *
+            </Form.Label>
+            <Col sm="8">
+              <Form.Control
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+                onChange={handleOnChange}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3 mt-3">
+            <Form.Label column sm="4">
+              Password *
             </Form.Label>
             <Col sm="8">
               <Form.Control
@@ -79,7 +85,7 @@ export const LoginForm = () => {
 
           <Form.Group as={Row} className="mb-3 mt-3">
             <Form.Label column sm="4">
-              Password *
+              Confirm Password *
             </Form.Label>
             <Col sm="8">
               <Form.Control
@@ -99,8 +105,8 @@ export const LoginForm = () => {
             </Button>
           </div>
         </Form>
-        <a className="mt-2 text-end" href="/reset-password">
-          Forgot Password?
+        <a className="mt-2 text-end" href="/">
+          Login Now
         </a>
       </Card>
     </div>

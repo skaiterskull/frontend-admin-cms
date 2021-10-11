@@ -10,7 +10,7 @@ const initialState = {
   password: "",
 };
 
-export const LoginForm = () => {
+export const OtpRequestForm = () => {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -41,18 +41,10 @@ export const LoginForm = () => {
     dispatch(adminLogin(loginInfo));
   };
 
-  if (isLoading) {
-    return (
-      <div className="loader">
-        <Spinner animation="border"></Spinner>;
-      </div>
-    );
-  }
-
   return (
     <div>
       <Card className="p-5 mt-4">
-        <h1>Admin User Login</h1>
+        <h1>Request OTP</h1>
         {isPending && <Spinner variant="primary" animation="border" />}
         {userResp?.message && (
           <Alert variant={userResp.status === "success" ? "success" : "danger"}>
@@ -77,30 +69,14 @@ export const LoginForm = () => {
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3 mt-3">
-            <Form.Label column sm="4">
-              Password *
-            </Form.Label>
-            <Col sm="8">
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-                minLength="6"
-                onChange={handleOnChange}
-              />
-            </Col>
-          </Form.Group>
-
           <div className="d-grid gap-2">
             <Button type="submit" variant="primary" size="lg">
               Login
             </Button>
           </div>
         </Form>
-        <a className="mt-2 text-end" href="/reset-password">
-          Forgot Password?
+        <a className="mt-2 text-end" href="/">
+          Login Now
         </a>
       </Card>
     </div>
