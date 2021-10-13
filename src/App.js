@@ -13,6 +13,7 @@ import Payment from "./pages/payment/Payment";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import AdminProfile from "./pages/admin-profile/AdminProfile";
 import ResetPassword from "./pages/reset-password/ResetPassword";
+import AddProduct from "./pages/product/AddProduct";
 
 function App() {
   return (
@@ -31,8 +32,12 @@ function App() {
             <Category />
           </PrivateRoute>
 
-          <PrivateRoute path="/products">
+          <PrivateRoute exact path="/products">
             <Product />
+          </PrivateRoute>
+
+          <PrivateRoute path="/products/new">
+            <AddProduct />
           </PrivateRoute>
 
           <PrivateRoute path="/admin-profile">

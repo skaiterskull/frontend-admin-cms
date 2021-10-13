@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Form, Row, Col, Button } from "react-bootstrap";
-import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPasswordAction } from "../../pages/admin-user/userAction";
 import { Alert, Spinner, ListGroup } from "react-bootstrap";
@@ -21,22 +20,14 @@ const initialError = {
 };
 
 export const ResetPasswordForm = () => {
-  const history = useHistory();
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const [userPassword, setUserPassword] = useState(initialState);
   const [passError, setPassError] = useState(initialError);
 
-  const { isPending, userResp, isLoggedIn, passResetEmail } = useSelector(
+  const { isPending, userResp, passResetEmail } = useSelector(
     (state) => state.user
   );
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const pageLoading = () => {
-    setIsLoading(false);
-  };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;

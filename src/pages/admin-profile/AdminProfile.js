@@ -12,7 +12,7 @@ export const AdminProfile = () => {
 
   useEffect(() => {
     !user?._id && dispatch(getUserProfile());
-  }, []);
+  }, [dispatch, user]);
 
   return (
     <AdminLayout>

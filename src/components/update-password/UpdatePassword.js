@@ -20,7 +20,7 @@ const initialError = {
 };
 
 export const UpdatePassword = () => {
-  const { user, isPending, userResp } = useSelector((state) => state.user);
+  const { isPending, userResp } = useSelector((state) => state.user);
   const [userPassword, setUserPassword] = useState(initialState);
   const [passError, setPassError] = useState(initialError);
   const dispatch = useDispatch();
