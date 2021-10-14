@@ -10,7 +10,7 @@ export const fetchProduct = async (slug) => {
   try {
     const apiEndpoint = slug ? productAPI + "/" + slug : productAPI;
     const { data } = await axios.get(apiEndpoint, {
-      headers: { Authorization: window.localStorage.getItem("refreshJWT") },
+      headers: { Authorization: window.sessionStorage.getItem("accessJWT") },
     });
 
     return data;
@@ -22,7 +22,7 @@ export const fetchProduct = async (slug) => {
 export const deleteProduct = async (_id) => {
   try {
     const { data } = await axios.delete(productAPI + "/" + _id, {
-      headers: { Authorization: window.localStorage.getItem("refreshJWT") },
+      headers: { Authorization: window.sessionStorage.getItem("accessJWT") },
     });
 
     return data;
