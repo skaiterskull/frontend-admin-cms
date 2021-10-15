@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Row, Col, Button, FloatingLabel } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { addNewCat } from "../../pages/category/CategoryAction";
+import { CustomModal } from "../../components/custom-modal/CustomModal";
 
 const initialState = {
   name: "",
@@ -9,9 +10,10 @@ const initialState = {
 };
 
 export const AddCategoryForm = () => {
-  const { categories } = useSelector((state) => state.category);
+  const { categories, categoryRes } = useSelector((state) => state.category);
   const dispatch = useDispatch();
   const [newCat, setNewCat] = useState(initialState);
+  const [showModal, setShowModal] = useState(false);
 
   //parent cat only
   const parentCatOnly = categories?.filter((row) => !row.parentCat);
@@ -23,10 +25,21 @@ export const AddCategoryForm = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     dispatch(addNewCat(newCat));
+    e.target.reset();
+    setShowModal(true);
   };
 
   return (
     <div>
+      {categoryRes?.status && (
+        <CustomModal
+          title={categoryRes.status}
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
+          <div>{categoryRes.message}</div>
+        </CustomModal>
+      )}
       <Form onSubmit={handleOnSubmit}>
         <Row>
           <Col md={5} className="mt-md-2">

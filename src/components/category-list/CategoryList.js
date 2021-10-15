@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ListGroup, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { Spinner, Alert } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { categoryDelete } from "../../pages/category/CategoryAction";
 import { onCategorySelect } from "../../pages/category/CategorySlice";
 import { EditCategoryForm } from "../edit-category-form/EditCategoryForm";
+import { CustomModal } from "../../components/custom-modal/CustomModal";
 
 export const CategoryList = () => {
   const { isPending, categories, categoryRes } = useSelector(
     (state) => state.category
   );
+  const [showModal, setShowModal] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -30,6 +32,8 @@ export const CategoryList = () => {
     if (window.confirm("Are you sure you want to delete this category ?")) {
       dispatch(categoryDelete(_id));
     }
+
+    setShowModal(true);
   };
 
   return (
@@ -37,11 +41,13 @@ export const CategoryList = () => {
       <EditCategoryForm />
       {isPending && <Spinner variant="primary" animation="border" />}
       {categoryRes?.status && (
-        <Alert
-          variant={categoryRes?.status === "Success" ? "success" : "danger"}
+        <CustomModal
+          title={categoryRes.status}
+          show={showModal}
+          onHide={() => setShowModal(false)}
         >
-          {categoryRes?.message}
-        </Alert>
+          <div>{categoryRes.message}</div>
+        </CustomModal>
       )}
       <ListGroup>
         {parentCatOnly &&
