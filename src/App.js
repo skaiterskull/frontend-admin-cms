@@ -14,6 +14,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import AdminProfile from "./pages/admin-profile/AdminProfile";
 import ResetPassword from "./pages/reset-password/ResetPassword";
 import AddProduct from "./pages/product/AddProduct";
+import EditProduct from "./pages/product/EditProduct";
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
 
           <PrivateRoute path="/products/new">
             <AddProduct />
+          </PrivateRoute>
+
+          <PrivateRoute path="/products/:slug">
+            <EditProduct />
           </PrivateRoute>
 
           <PrivateRoute path="/admin-profile">

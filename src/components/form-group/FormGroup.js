@@ -7,7 +7,7 @@ export const FormGroup = ({ label, ...rest }) => {
       <Form.Label column sm="2">
         {label}
       </Form.Label>
-      <Col sm="10">
+      <Col column sm="10">
         <Form.Control {...rest} />
       </Col>
     </Form.Group>

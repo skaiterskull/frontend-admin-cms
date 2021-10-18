@@ -35,6 +35,7 @@ export const EditCategoryForm = () => {
 
   return (
     <CustomModal
+      size="lg"
       show={selectedCat._id}
       onHide={() => dispatch(onDeSelectCategory())}
       title="Edit Category"

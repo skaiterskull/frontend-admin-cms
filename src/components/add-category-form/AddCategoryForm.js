@@ -10,7 +10,9 @@ const initialState = {
 };
 
 export const AddCategoryForm = () => {
-  const { categories, categoryRes } = useSelector((state) => state.category);
+  const { categories, categoryRes, isPending } = useSelector(
+    (state) => state.category
+  );
   const dispatch = useDispatch();
   const [newCat, setNewCat] = useState(initialState);
   const [showModal, setShowModal] = useState(false);
@@ -26,13 +28,16 @@ export const AddCategoryForm = () => {
     e.preventDefault();
     dispatch(addNewCat(newCat));
     e.target.reset();
-    setShowModal(true);
+    if (!isPending) {
+      setShowModal(true);
+    }
   };
 
   return (
     <div>
       {categoryRes?.status && (
         <CustomModal
+          size="sm"
           title={categoryRes.status}
           show={showModal}
           onHide={() => setShowModal(false)}

@@ -4,9 +4,15 @@ import {
   getSingleProduct,
   deleteProductSlice,
   addProductSlice,
+  updateProductSuccess,
   reqFail,
 } from "./productSlice";
-import { fetchProduct, deleteProduct, addProduct } from "../../apis/productApi";
+import {
+  fetchProduct,
+  deleteProduct,
+  addProduct,
+  updateProduct,
+} from "../../apis/productApi";
 import { newAccessJWTApi } from "../../apis/tokenApi";
 import { userLogoutAction } from "../admin-user/userAction";
 
@@ -25,6 +31,24 @@ export const getProductsAction = () => async (dispatch) => {
 
   data?.status === "Success"
     ? dispatch(getProduct(data.result))
+    : dispatch(reqFail(data.result));
+};
+
+export const getSingleProductAction = (slug) => async (dispatch) => {
+  dispatch(reqPending());
+
+  const data = await fetchProduct(slug);
+  if (data?.message === "JWT expired") {
+    const token = await newAccessJWTApi();
+    if (token) {
+      dispatch(getSingleProduct(slug));
+    } else {
+      dispatch(userLogoutAction());
+    }
+  }
+
+  data?.status === "Success"
+    ? dispatch(getSingleProduct(data.result))
     : dispatch(reqFail(data.result));
 };
 
@@ -64,6 +88,26 @@ export const addProductsAction = (productInfo) => async (dispatch) => {
   if (data?.status === "Success") {
     console.log(data);
     return dispatch(addProductSlice(data));
+  }
+  dispatch(reqFail(data));
+};
+
+export const updateProductsAction = (slug, productInfo) => async (dispatch) => {
+  dispatch(reqPending());
+
+  const data = await updateProduct(productInfo);
+  if (data?.message === "JWT expired") {
+    const token = await newAccessJWTApi();
+    if (token) {
+      dispatch(updateProductsAction(slug, productInfo));
+    } else {
+      dispatch(userLogoutAction());
+    }
+  }
+
+  if (data?.status === "Success") {
+    dispatch(updateProductSuccess(data));
+    return dispatch(getSingleProductAction(slug));
   }
   dispatch(reqFail(data));
 };

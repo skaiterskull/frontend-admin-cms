@@ -3,8 +3,10 @@ import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserProfileAction } from "../../pages/admin-user/userAction";
 import { Spinner, Alert } from "react-bootstrap";
+import { CustomModal } from "../../components/custom-modal/CustomModal";
 
 export const EditAdminProfile = () => {
+  const [showModal, setShowModal] = useState(false);
   const { user, isPending, userResp } = useSelector((state) => state.user);
   const [userInfo, setUserInfo] = useState(user);
   const dispatch = useDispatch();
@@ -25,7 +27,7 @@ export const EditAdminProfile = () => {
       gender,
     };
     dispatch(updateUserProfileAction(newUserInfo));
-    console.log(newUserInfo);
+    setShowModal(true);
   };
 
   const handleOnChange = (e) => {
@@ -36,10 +38,15 @@ export const EditAdminProfile = () => {
   return (
     <Form onSubmit={handleOnSubmit}>
       {isPending && <Spinner variant="primary" animation="border" />}
-      {userResp?.message && (
-        <Alert variant={userResp.status === "Success" ? "success" : "danger"}>
-          {userResp.message}
-        </Alert>
+      {userResp?.status && (
+        <CustomModal
+          size="sm"
+          title={userResp.status}
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
+          <div>{userResp.message}</div>
+        </CustomModal>
       )}
 
       <Form.Group as={Row} className="mb-2 mt-2">

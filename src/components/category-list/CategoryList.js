@@ -32,8 +32,9 @@ export const CategoryList = () => {
     if (window.confirm("Are you sure you want to delete this category ?")) {
       dispatch(categoryDelete(_id));
     }
-
-    setShowModal(true);
+    if (!isPending) {
+      setShowModal(true);
+    }
   };
 
   return (
@@ -42,6 +43,7 @@ export const CategoryList = () => {
       {isPending && <Spinner variant="primary" animation="border" />}
       {categoryRes?.status && (
         <CustomModal
+          size="sm"
           title={categoryRes.status}
           show={showModal}
           onHide={() => setShowModal(false)}

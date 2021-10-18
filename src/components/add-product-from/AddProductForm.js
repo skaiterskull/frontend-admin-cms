@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Form, Button, Spinner, Alert } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Spinner, Row, Col, Badge } from "react-bootstrap";
 import { FormGroup } from "../../components/form-group/FormGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { addProductsAction } from "../../pages/product/productAction";
+import { CustomModal } from "../../components/custom-modal/CustomModal";
+import { ProductCategoryList } from "../../components/category-list/ProductCategoryList";
+import { getCategories } from "../../pages/category/CategoryAction";
 
 const initialState = {
   title: "",
-  status: true,
+  status: false,
   categories: "aaa",
   price: 0,
   qty: 0,
@@ -53,14 +56,27 @@ const inputFields = [
 ];
 
 export const AddProductForm = () => {
+  const [showModal, setShowModal] = useState(false);
   const [product, setProduct] = useState(initialState);
   const dispatch = useDispatch();
   const { isPending, productRes } = useSelector((state) => state.product);
+  const { categories } = useSelector((state) => state.category);
+  const [prodCategory, setprodCategory] = useState([]);
+
+  useEffect(() => {
+    if (!categories.length) {
+      dispatch(getCategories());
+    }
+  }, [dispatch]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(addProductsAction(product));
+    dispatch(addProductsAction({ ...product, categories: prodCategory }));
     e.target.reset();
+    if (!isPending) {
+      setShowModal(true);
+    }
+    console.log(product);
   };
 
   const handleOnChange = (e) => {
@@ -77,27 +93,69 @@ export const AddProductForm = () => {
     });
   };
 
+  const handleOnCatSelect = (e) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setprodCategory([...prodCategory, value]);
+    } else {
+      const arg = prodCategory.filter((row) => row !== value);
+      setprodCategory(arg);
+    }
+  };
+
   return (
     <div>
       {isPending && <Spinner animation="border"></Spinner>}
-      {productRes?.message && (
-        <Alert variant={productRes.status === "Success" ? "success" : "danger"}>
-          {productRes.message}
-        </Alert>
+      {productRes?.status && (
+        <CustomModal
+          size="sm"
+          title={productRes.status}
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
+          <div>{productRes.message}</div>
+        </CustomModal>
       )}
       <Form onSubmit={handleOnSubmit}>
-        <Form.Group>
-          <Form.Check
-            type="switch"
-            name="status"
-            id="custom-switch"
-            label="Status"
-            onChange={handleOnChange}
-          />
+        <Form.Group as={Row} className="mb-3">
+          <Col sm="2">
+            <Form.Check
+              checked={product?.status}
+              type="switch"
+              name="status"
+              id="custom-switch"
+              label="Status"
+              onChange={handleOnChange}
+            />
+          </Col>
+
+          {product?.status ? (
+            <Form.Label column sm="10" className="pt-0">
+              <Badge bg="success">Online</Badge>
+            </Form.Label>
+          ) : (
+            <Form.Label column sm="10" className="pt-0">
+              <Badge bg="danger">Offline</Badge>
+            </Form.Label>
+          )}
         </Form.Group>
+
         {inputFields.map((row, i) => (
           <FormGroup {...row} onChange={handleOnChange} />
         ))}
+
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm="2">
+            Categories
+          </Form.Label>
+          <Col sm="10">
+            <ProductCategoryList
+              handleOnCatSelect={handleOnCatSelect}
+              prodCategory={prodCategory}
+            />
+          </Col>
+        </Form.Group>
+
         <Button type="submit" variant="success">
           Add new product
         </Button>

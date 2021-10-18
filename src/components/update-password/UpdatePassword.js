@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserPasswordAction } from "../../pages/admin-user/userAction";
-import { Spinner, Alert, ListGroup } from "react-bootstrap";
+import { Spinner, ListGroup } from "react-bootstrap";
+import { CustomModal } from "../custom-modal/CustomModal";
 
 const initialState = {
   currentPassword: "",
@@ -20,6 +21,7 @@ const initialError = {
 };
 
 export const UpdatePassword = () => {
+  const [showModal, setShowModal] = useState(false);
   const { isPending, userResp } = useSelector((state) => state.user);
   const [userPassword, setUserPassword] = useState(initialState);
   const [passError, setPassError] = useState(initialError);
@@ -29,6 +31,9 @@ export const UpdatePassword = () => {
     e.preventDefault();
     const { password, currentPassword } = userPassword;
     dispatch(updateUserPasswordAction({ password, currentPassword }));
+    if (!isPending) {
+      setShowModal(true);
+    }
   };
 
   const handleOnChange = (e) => {
@@ -64,10 +69,15 @@ export const UpdatePassword = () => {
   return (
     <Form onSubmit={handleOnSubmit}>
       {isPending && <Spinner variant="primary" animation="border" />}
-      {userResp?.message && (
-        <Alert variant={userResp.status === "Success" ? "success" : "danger"}>
-          {userResp.message}
-        </Alert>
+      {userResp?.status && (
+        <CustomModal
+          size="sm"
+          title={userResp.status}
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
+          <div>{userResp.message}</div>
+        </CustomModal>
       )}
       <Form.Group as={Row} className="mb-2 mt-2">
         <Col sm="4" className="d-flex align-items-center justify-content-start">

@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
-import { Table, Spinner, Alert } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Table, Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import {
   getProductsAction,
   deleteProductsAction,
 } from "../../pages/product/productAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
+import { CustomModal } from "../custom-modal/CustomModal";
 
 export const ListTable = () => {
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const { productList, isPending, productRes } = useSelector(
     (state) => state.product
   );
@@ -20,16 +23,24 @@ export const ListTable = () => {
   const handleOnDelete = (_id) => {
     if (window.confirm("Are you sure you want to delete this peoduct?")) {
       dispatch(deleteProductsAction(_id));
+      if (!isPending) {
+        setShowModal(true);
+      }
     }
   };
 
   return (
     <div>
       {isPending && <Spinner animation="border"></Spinner>}
-      {productRes?.message && (
-        <Alert variant={productRes.status === "Success" ? "success" : "danger"}>
-          {productRes.message}
-        </Alert>
+      {productRes?.status && (
+        <CustomModal
+          size="sm"
+          title={productRes.status}
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
+          <div>{productRes.message}</div>
+        </CustomModal>
       )}
       <Table striped bordered hover>
         <thead>
@@ -55,7 +66,9 @@ export const ListTable = () => {
                 <td>{row.qty}</td>
                 <td>{row.brand}</td>
                 <td>
-                  <Button variant="primary">Edit</Button>
+                  <Link to={`/products/${row.slug}`}>
+                    <Button variant="primary">Edit</Button>
+                  </Link>
                 </td>
                 <td>
                   <Button

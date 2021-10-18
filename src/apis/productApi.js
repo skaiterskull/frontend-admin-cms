@@ -34,7 +34,19 @@ export const deleteProduct = async (_id) => {
 export const addProduct = async (productInfo) => {
   try {
     const { data } = await axios.post(productAPI, productInfo, {
-      headers: { Authorization: window.localStorage.getItem("refreshJWT") },
+      headers: { Authorization: window.sessionStorage.getItem("accessJWT") },
+    });
+
+    return data;
+  } catch (error) {
+    return error?.response?.data || { status: "Error", message: error.message };
+  }
+};
+
+export const updateProduct = async (productInfo) => {
+  try {
+    const { data } = await axios.put(productAPI, productInfo, {
+      headers: { Authorization: window.sessionStorage.getItem("accessJWT") },
     });
 
     return data;
