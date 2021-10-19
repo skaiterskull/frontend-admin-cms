@@ -29,6 +29,8 @@ export const EditProductForm = () => {
   const [updateProduct, setUpdateProduct] = useState(initialState);
   const [showModal, setShowModal] = useState(false);
   const [prodCategory, setprodCategory] = useState([]);
+  const [imgToDelete, setImgToDelete] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   const dispatch = useDispatch();
   const { isPending, productRes, selectedProduct } = useSelector(
     (state) => state.product
@@ -49,27 +51,55 @@ export const EditProductForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    const { __v, slug, ...toUpdate } = updateProduct;
+    const { __v, slug, images, ...toUpdate } = updateProduct;
+
+    // const filteredImageList = images?.filter(
+    //   (item) => !imgToDelete.includes(item)
+    // );
+
     toUpdate.categories = prodCategory;
-    dispatch(updateProductsAction(slug, toUpdate));
+    toUpdate.imgToDelete = imgToDelete;
+    toUpdate.oldImages = images;
+
+    const frmDt = new FormData();
+
+    for (const key in toUpdate) {
+      if (key === "saleStartDate" || key === "saleEndDate") {
+        frmDt.append(key, toUpdate[key] ? toUpdate[key] : "");
+        continue;
+      }
+      frmDt.append(key, toUpdate[key]);
+    }
+
+    newImages.length &&
+      [...newImages].map((img) => frmDt.append("images", img));
+
+    dispatch(updateProductsAction(slug, frmDt));
     setShowModal(true);
     e.target.reset();
     window.scrollTo(0, 0);
   };
 
   const handleOnChange = (e) => {
-    const { checked, name, value } = e.target;
+    const { checked, name, value, files } = e.target;
     if (name === "status") {
       return setUpdateProduct({
         ...updateProduct,
         status: checked,
       });
     }
+
+    if (files) {
+      return setNewImages(files);
+    }
+
     setUpdateProduct({
       ...updateProduct,
       [name]: value,
     });
   };
+
+  console.log(newImages, "fasdfdsa");
 
   const handleOnCatSelect = (e) => {
     const { checked, value } = e.target;
@@ -78,6 +108,16 @@ export const EditProductForm = () => {
     } else {
       const arg = prodCategory.filter((row) => row !== value);
       setprodCategory(arg);
+    }
+  };
+
+  const handleOnImgDelete = (e) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setImgToDelete([...imgToDelete, value]);
+    } else {
+      const obj = imgToDelete.filter((src) => src !== value);
+      setImgToDelete(obj);
     }
   };
 
@@ -144,7 +184,16 @@ export const EditProductForm = () => {
       required: true,
       value: updateProduct?.brand,
     },
+    {
+      label: "Select Images",
+      type: "file",
+      name: "images",
+      multiple: true,
+      accept: "image/*",
+      required: true,
+    },
   ];
+
   return (
     <div>
       {isPending && <Spinner animation="border"></Spinner>}
@@ -185,6 +234,23 @@ export const EditProductForm = () => {
         {inputFields?.map((row, i) => (
           <FormGroup {...row} onChange={handleOnChange} key={i} />
         ))}
+
+        <Form.Group as={Row} className="mb-3">
+          <div className="d-flex flex-wrap just-content-between">
+            {updateProduct?.images?.map((imgSrc, i) => (
+              <div className="d-flex flex-wrap just-content-between">
+                <img src={imgSrc} alt="Product images" key={i} width="80px" />
+                <Form.Check
+                  label="Delete"
+                  defaultValue={imgSrc}
+                  onChange={handleOnImgDelete}
+                  checked={imgToDelete.includes(imgSrc)}
+                ></Form.Check>
+              </div>
+            ))}
+          </div>
+        </Form.Group>
+
         <Form.Group as={Row} className="mb-3">
           <Form.Label column sm="2">
             Categories

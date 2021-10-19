@@ -10,7 +10,6 @@ import { getCategories } from "../../pages/category/CategoryAction";
 const initialState = {
   title: "",
   status: false,
-  categories: "aaa",
   price: 0,
   qty: 0,
   description: "",
@@ -53,15 +52,24 @@ const inputFields = [
   { label: "Sale Start Date", name: "saleStartDate", type: "date" },
   { label: "Sale End Date", name: "saleEndDate", type: "date" },
   { label: "Brand", name: "brand", placeholder: "Samsung TV", required: true },
+  {
+    label: "Select Images",
+    type: "file",
+    name: "images",
+    multiple: true,
+    accept: "image/*",
+    required: true,
+  },
 ];
 
 export const AddProductForm = () => {
   const [showModal, setShowModal] = useState(false);
   const [product, setProduct] = useState(initialState);
+  const [prodCategory, setprodCategory] = useState([]);
+  const [images, setImages] = useState([]);
   const dispatch = useDispatch();
   const { isPending, productRes } = useSelector((state) => state.product);
   const { categories } = useSelector((state) => state.category);
-  const [prodCategory, setprodCategory] = useState([]);
 
   useEffect(() => {
     if (!categories.length) {
@@ -71,16 +79,35 @@ export const AddProductForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(addProductsAction({ ...product, categories: prodCategory }));
-    e.target.reset();
+
+    const frmDt = new FormData();
+
+    //append all the product state
+    for (const key in product) {
+      frmDt.append(key, product[key]);
+    }
+
+    console.log(prodCategory);
+    //append the product category state
+    frmDt.append("categories", prodCategory);
+
+    //append the image
+    images.length && [...images].map((img) => frmDt.append("images", img));
+
+    dispatch(addProductsAction(frmDt));
+    // e.target.reset();
     if (!isPending) {
       setShowModal(true);
     }
-    console.log(product);
   };
 
   const handleOnChange = (e) => {
-    const { checked, name, value } = e.target;
+    const { checked, name, value, files } = e.target;
+
+    if (files) {
+      return setImages(files);
+    }
+
     if (name === "status") {
       return setProduct({
         ...product,
@@ -155,6 +182,8 @@ export const AddProductForm = () => {
             />
           </Col>
         </Form.Group>
+
+        <Form.Group as={Row} className="mb-3"></Form.Group>
 
         <Button type="submit" variant="success">
           Add new product

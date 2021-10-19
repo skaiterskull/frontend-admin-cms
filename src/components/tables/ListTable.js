@@ -46,6 +46,7 @@ export const ListTable = () => {
         <thead>
           <tr>
             <th>#</th>
+            <th>Thumbnail</th>
             <th>Status</th>
             <th>Title</th>
             <th>Price</th>
@@ -60,6 +61,15 @@ export const ListTable = () => {
             productList.map((row, i) => (
               <tr key={row._id}>
                 <td type="text">{i + 1}</td>
+                <td>
+                  {row.images?.length && (
+                    <img
+                      src={row.images[0]}
+                      alt="product thumbnail"
+                      style={{ width: "80px" }}
+                    />
+                  )}
+                </td>
                 <td>{row.status === true ? "Online" : "Offline"}</td>
                 <td>{row.title}</td>
                 <td>{row.price}</td>
