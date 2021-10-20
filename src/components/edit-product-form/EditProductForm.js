@@ -190,7 +190,6 @@ export const EditProductForm = () => {
       name: "images",
       multiple: true,
       accept: "image/*",
-      required: true,
     },
   ];
 

@@ -95,7 +95,7 @@ export const AddProductForm = () => {
     images.length && [...images].map((img) => frmDt.append("images", img));
 
     dispatch(addProductsAction(frmDt));
-    // e.target.reset();
+    e.target.reset();
     if (!isPending) {
       setShowModal(true);
     }
